@@ -1,19 +1,22 @@
-const mongoose = require('mongoose');
+const Sequelize = require('sequelize');
+const db = require('../config/database');
 
-const EmpresaSchema = new mongoose.Schema({
+const Empresa = db.define('Empresa', {
     nome: {
-        type: String,
-        required: true,
+        type: Sequelize.STRING,
+        allowNull: false
     },
     cnpj: {
-        type: String,
+        type: Sequelize.STRING
     },
     proprietario: {
-        type: String,
+        type: Sequelize.STRING
     },
-    logo:{
-        type: String,
-    },
+    logo: {
+        type: Sequelize.STRING
+    }    
 });
 
-mongoose.model('Empresa', EmpresaSchema);
+module.exports = Empresa;
+
+

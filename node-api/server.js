@@ -1,13 +1,18 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const requireDir = require('require-dir');
+const db = require('./src/config/database');
+
+db.authenticate().then(() => {
+    console.log('Conectado com sucesso ao MySQL.');
+  })
+  .catch(err => {
+    console.log('Erro ao conectar ao MySQL:' + err);
+  });
+
 
 //iniciando o app
 const app = express();
 app.use(express.json());
-
-//iniciando o DB
-mongoose.connect('mongodb://localhost:27017/nodeBarberApi', {useNewUrlParser: true});
 
 //rotas
 requireDir('./src/models');

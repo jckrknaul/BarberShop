@@ -1,14 +1,17 @@
-const mongoose = require('mongoose');
-const Empresa = mongoose.model('Empresa');
+const Empresa = require('../models/Empresa');
 
 module.exports = {
     async returnAll(req, res){
-        const empresas = await Empresa.find();
-        return res.json(empresas);
+        const empresa = await Empresa.findAll();
+        return res.json(empresa);
     },
     
     async returnByID(req, res){
-        const empresa = await Empresa.findById(req.params.id);
+        const empresa = await Empresa.findAll({
+            where: {
+                id: req.params.id
+            }
+        });
         return res.json(empresa);
     },
     
@@ -18,12 +21,20 @@ module.exports = {
     },
 
     async update(req, res){
-        const empresa = await Empresa.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        const empresa = await Empresa.update(req.body, {
+            where: {
+                id: req.params.id
+            }
+        });
         return res.json(empresa);
     },
 
     async delete(req, res){
-        await Empresa.findByIdAndRemove(req.params.id);
+        await Empresa.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
         return res.send();
     }
 
