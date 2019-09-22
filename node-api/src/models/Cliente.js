@@ -10,7 +10,10 @@ const Cliente = db.define('Cliente', {
     telefone: {
         type: Sequelize.STRING,
         allowNull: false
-    }    
+    },
+    qtdeServUtilizados: {
+        type: Sequelize.INTEGER
+    }
 });
 
 Cliente.belongsTo(Empresa, {foreingKey: 'fk_Empresa'});
