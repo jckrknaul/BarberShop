@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require('express');
 const requireDir = require('require-dir');
 const db = require('./src/config/database');
@@ -13,6 +15,7 @@ db.authenticate().then(() => {
 //iniciando o app
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 //rotas
 requireDir('./src/models');

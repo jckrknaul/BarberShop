@@ -16,7 +16,10 @@ module.exports = {
     },
     
     async insert(req, res){
-        const estab = await Estabelecimento.create(req.body);
+        if (!req.body.EmpresaId)
+          return res.json("Necessário informar o ID da empresa!");
+        
+          const estab = await Estabelecimento.create(req.body);
         return res.json(estab);
     },
 

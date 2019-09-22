@@ -1,9 +1,6 @@
 const Sequelize = require('sequelize');
 
- const sequelize = new Sequelize('BarberShop', 'root', 'masterkey',{
-    host: 'localhost',
-    dialect: 'mysql', 
-})
+const sequelize = new Sequelize(process.env.MYSQL_URL);
 
 sequelize.sync();
 
