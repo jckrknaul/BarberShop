@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require('express');
 const requireDir = require('require-dir');
 const db = require('./src/config/database');
+const cors = require('cors');
 
 db.authenticate().then(() => {
   console.log('Conectado com sucesso ao MySQL.');
@@ -13,6 +14,7 @@ db.authenticate().then(() => {
 
 //iniciando o app
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
