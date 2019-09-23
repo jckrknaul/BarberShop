@@ -9,6 +9,10 @@ const ClienteController = require('./controllers/ClienteController');
 const ServicoController = require('./controllers/ServicoController');
 const AgendaClienteController = require('./controllers/AgendaClienteController');
 
+routes.get('/', (req, res) => {
+    res.send("Hello Barbearia!");
+});
+
 routes.get('/empresa', EmpresaController.returnAll);
 routes.get('/empresa/:id', EmpresaController.returnByID);
 routes.put('/empresa/:id', EmpresaController.update);
