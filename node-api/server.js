@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //rotas
 requireDir('./src/models');
-app.use('/api', require('./src/routes'));
+app.use('/', require('./src/routes'));
 
 //coloca o app para ouviar a porta 3001
 app.listen(3001);
