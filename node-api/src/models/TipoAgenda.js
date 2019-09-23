@@ -8,7 +8,7 @@ const TipoAgenda = db.define('TipoAgenda', {
         allowNull: false
     },
     dias: {
-        type: Sequelize.JSON
+        type: Sequelize.STRING
     },
     periodicidade: {
         type: Sequelize.INTEGER
