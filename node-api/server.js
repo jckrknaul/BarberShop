@@ -23,4 +23,4 @@ requireDir('./src/models');
 app.use('/', require('./src/routes'));
 
 //coloca o app para ouviar a porta 3001
-app.listen(process.env.port || 3001);
+app.listen(process.env.PORT || 3001);
