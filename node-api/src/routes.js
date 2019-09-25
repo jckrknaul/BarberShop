@@ -1,18 +1,29 @@
 const express = require('express');
 const routes = express.Router();
+const authMiddleware = require('./middlewares/auth');
+
 const EmpresaController = require('./controllers/EmpresaController');
 const EstabelecimentoController = require('./controllers/EstabelecimentoController');
-const UsuarioWebController = require('./controllers/UsuarioWebController');
+const UsuarioController = require('./controllers/UsuarioController');
 const TipoAgendaController = require('./controllers/TipoAgendaController');
 const ProficionalController = require('./controllers/ProficionalController');
 const ClienteController = require('./controllers/ClienteController');
 const ServicoController = require('./controllers/ServicoController');
 const AgendaClienteController = require('./controllers/AgendaClienteController');
 
-
+//middleware para fazer a autenticação
+routes.use(authMiddleware);
 routes.get('/', (req, res) => {
-    res.send("Hello Barbearia!");
+    res.send({ok: true, user: req.userId});
 });
+
+routes.get('/usuario', UsuarioController.returnAll);
+routes.get('/usuario/:id', UsuarioController.returnByID);
+routes.put('/usuario/:id', UsuarioController.update);
+routes.post('/usuario', UsuarioController.insert);
+routes.post('/usuario/registrar', UsuarioController.register);
+routes.post('/usuario/autenticar', UsuarioController.authenticate);
+routes.delete('/usuario/:id', UsuarioController.delete);
 
 routes.get('/empresa', EmpresaController.returnAll);
 routes.get('/empresa/:id', EmpresaController.returnByID);
@@ -25,12 +36,6 @@ routes.get('/estabelecimento/:id', EstabelecimentoController.returnByID);
 routes.put('/estabelecimento/:id', EstabelecimentoController.update);
 routes.post('/estabelecimento', EstabelecimentoController.insert);
 routes.delete('/estabelecimento/:id', EstabelecimentoController.delete);
-
-routes.get('/usuarioweb', UsuarioWebController.returnAll);
-routes.get('/usuarioweb/:id', UsuarioWebController.returnByID);
-routes.put('/usuarioweb/:id', UsuarioWebController.update);
-routes.post('/usuarioweb', UsuarioWebController.insert);
-routes.delete('/usuarioweb/:id', UsuarioWebController.delete);
 
 routes.get('/tipoagenda', TipoAgendaController.returnAll);
 routes.get('/tipoagenda/:id', TipoAgendaController.returnByID);
