@@ -17,19 +17,17 @@ const Usuario = db.define('Usuario', {
         type: Sequelize.STRING
     },
     senhaResetToken: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING
     },
     senhaResetExpires: {
         type: Sequelize.DATE
     }
 });
 
-//o evento "beforeCreate" será chamado antes de ir ao banco...
-Usuario.beforeCreate((user , options) => {
-    {
-        console.log("hook called");
-        user.senha = user.senha && user.senha != "" ? bcryptjs.hashSync(user.senha, 10) : "";
-    }
+
+//o evento "beforeSave" será chamado antes de ir ao banco...
+Usuario.beforeSave((user , options) => {
+    { user.senha = bcryptjs.hashSync(user.senha, 10); }
 });
 
 Usuario.belongsTo(Empresa, {foreingKey: 'fk_Empresa'}); 

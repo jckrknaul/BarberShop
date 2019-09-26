@@ -1,8 +1,10 @@
+const path = require('path');
 const Usuario = require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../config/auth.json');
 const crypto = require('crypto');
+const mailer = require('../modules/mailer');
 
 function gerarToken(params = {}){
     return jwt.sign(params, authConfig.secret, {expiresIn: 86400});
@@ -92,7 +94,6 @@ module.exports = {
     async forgotPass(req, res) {
         
         const { email } = req.body;
-
         try {
 
             const usuario = await Usuario.findOne({where: { email: email }});
@@ -105,10 +106,52 @@ module.exports = {
             const now = new Date();
             now.setHours(now.getHours() + 1);
 
+            //atualiza a senha reset token e a data de expiração deste token
+            await Usuario.update({senhaResetToken: token, senhaResetExpires: now}, {where: {id: usuario.dataValues.id}});
 
+            //envia o email com o template html da pasta resources
+            mailer.sendMail({
+                to: email,
+                from: 'jckr.knaul@gmail.com',
+                template: 'auth/forgotPass',
+                context: { token },
+            }, (err) => {
+                console.log(err);
+                if (err)
+                    return res.status(400).send({error: 'Erro ao enviar o email de esquici a senha!'});
+                
+                return res.send();
+            });
+            
+        } catch (error) {
+            return res.status(400).send({error: 'Erro ao acessar esqueci a senha!'});   
+        }
+    },
+
+    async resetPass(req, res){
+
+        const { email, token, senha } = req.body;
+        try {
+            const usuario = await Usuario.findOne({where: { email: email }});
+            if (!usuario)
+                return res.status(400).send({error: 'Usuário não encontrado!'});
+
+            if (token !== usuario.dataValues.senhaResetToken)
+                return res.status(400).send({error: 'Token invalido!'});
+
+            const now = new Date();
+            if (now > usuario.dataValues.senhaResetExpires)
+                return res.status(400).send({error: 'Token expirado! Favor gere um novo token.'});
+
+            //gerar nova senha Hash            
+            const senhaHash = bcryptjs.hashSync(usuario.dataValues.senha, 10);
+            //atualizar no banco a nova senha
+            await Usuario.update({senha: senhaHash}, {where: { id: usuario.dataValues.id }});
+            //retorna ao usuário com sucesso
+            res.send();
 
         } catch (error) {
-            return res.status(400).send({error: 'Erro ao acessar esqueci a senha!'});
+            return res.status(400).send({error: 'Erro ao resetar a senha!'});
         }
     }
 

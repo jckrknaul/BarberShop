@@ -23,6 +23,8 @@ routes.put('/usuario/:id', UsuarioController.update);
 routes.post('/usuario', UsuarioController.insert);
 routes.post('/usuario/registrar', UsuarioController.register);
 routes.post('/usuario/autenticar', UsuarioController.authenticate);
+routes.post('/usuario/forgotpass', UsuarioController.forgotPass);
+routes.post('/usuario/resetpass', UsuarioController.resetPass);
 routes.delete('/usuario/:id', UsuarioController.delete);
 
 routes.get('/empresa', EmpresaController.returnAll);
